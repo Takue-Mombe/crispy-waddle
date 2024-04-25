@@ -18,4 +18,7 @@ public class Marks {
     @ManyToOne
     @JoinColumn(name = "student_id")
     private Student student;
+    @ManyToOne
+    @JoinColumn(name = "assessment_id")
+    private Assessments assessment;
 }

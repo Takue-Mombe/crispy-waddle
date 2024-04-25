@@ -26,5 +26,8 @@ public class Programs {
     private School school;
     @OneToMany(mappedBy = "program")
     private List<Courses> courses;
+    @OneToMany(mappedBy = "program") // Referring to the "program" field in the Student entity
+    private List<Student> students; // List of students enrolled in this program
+
 
 }

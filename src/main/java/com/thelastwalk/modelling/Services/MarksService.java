@@ -17,7 +17,9 @@ public class MarksService {
         this.marksRepository = marksRepository;
     }
 
-    // Create
+    public void saveAllMarks(List<Marks> marks) {
+        marksRepository.saveAll(marks);
+    }
     public Marks createMarks(Marks marks) {
         return marksRepository.save(marks);
     }

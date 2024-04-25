@@ -1,35 +1,30 @@
 package com.thelastwalk.modelling.Controllers;
 
-import com.thelastwalk.modelling.Models.Assessments;
 import com.thelastwalk.modelling.Models.Courses;
 import com.thelastwalk.modelling.Models.Lecturer;
-import com.thelastwalk.modelling.Models.Student;
-import com.thelastwalk.modelling.Services.AssessmentService;
+import com.thelastwalk.modelling.Models.Marks;
 import com.thelastwalk.modelling.Services.CourseService;
 import com.thelastwalk.modelling.Services.LecturerService;
-import com.thelastwalk.modelling.Services.StudentService;
+import com.thelastwalk.modelling.Services.MarksService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
+import java.util.List;
 
 @Controller
 @RequestMapping("/lecturer")
 public class LecturerController {
-    private final AssessmentService assessmentService;
     private final CourseService courseService;
-    private final StudentService studentService;
     private final LecturerService lecturerService;
-
+    private final MarksService marksService;
 
     @Autowired
-    public LecturerController(AssessmentService assessmentService, CourseService courseService, StudentService studentService, LecturerService lecturerService) {
-        this.assessmentService = assessmentService;
+    public LecturerController(CourseService courseService, LecturerService lecturerService, MarksService marksService) {
         this.courseService = courseService;
-        this.studentService = studentService;
         this.lecturerService = lecturerService;
+        this.marksService = marksService;
     }
 
     @GetMapping("/list")
@@ -40,8 +35,8 @@ public class LecturerController {
 
     @PostMapping("/list")
     public String showLecturerCourses(@RequestParam("lecturerId") Long lecturerId, Model model) {
-        Optional<Lecturer> optionalLecturer = lecturerService.getLecturerById(lecturerId);
-        Lecturer lecturer = optionalLecturer.orElseThrow(() -> new IllegalArgumentException("Lecturer not found"));
+        Lecturer lecturer = lecturerService.getLecturerById(lecturerId)
+                .orElseThrow(() -> new IllegalArgumentException("Lecturer not found"));
         model.addAttribute("lecturer", lecturer);
         model.addAttribute("courses", lecturer.getCourses());
         return "Lecturer/InputMarks";
@@ -49,14 +44,23 @@ public class LecturerController {
 
     @PostMapping("/course")
     public String showCourseStudents(@RequestParam("lecturerId") Long lecturerId, @RequestParam("courseId") Long courseId, Model model) {
-        Optional<Lecturer> optionalLecturer = lecturerService.getLecturerById(lecturerId);
-        Lecturer lecturer = optionalLecturer.orElseThrow(() -> new IllegalArgumentException("Lecturer not found"));
+        Lecturer lecturer = lecturerService.getLecturerById(lecturerId)
+                .orElseThrow(() -> new IllegalArgumentException("Lecturer not found"));
 
-        Optional<Courses> optionalCourse = courseService.getCourseById(courseId);
-        Courses course = optionalCourse.orElseThrow(() -> new IllegalArgumentException("Course not found"));
+        Courses course = courseService.getCourseById(courseId)
+                .orElseThrow(() -> new IllegalArgumentException("Course not found"));
 
         model.addAttribute("lecturer", lecturer);
         model.addAttribute("course", course);
+        model.addAttribute("students", course.getProgram().getStudents());
+
         return "Lecturer/InputMarks";
+    }
+
+    @PostMapping("/submitMarks")
+    public String submitMarks(@RequestParam("courseId") Long courseId, @ModelAttribute("marks") List<Marks> marks) {
+
+        marksService.saveAllMarks(marks);
+        return "redirect:/lecturer/list";
     }
 }

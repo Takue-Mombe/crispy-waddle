@@ -1,9 +1,13 @@
 package com.thelastwalk.modelling.Services;
 
 import com.thelastwalk.modelling.Models.Courses;
+import com.thelastwalk.modelling.Models.Programs;
+import com.thelastwalk.modelling.Models.Student;
 import com.thelastwalk.modelling.Repositories.CoursesRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,7 +35,14 @@ public class CourseService {
         return courseRepository.findById(id);
     }
 
-    // Update
+
+    public List<Student> getStudentsByCourse(Courses course) {
+        List<Student> students = new ArrayList<>();
+        for (Programs program : course.getProgram().getSchool().getPrograms()) {
+            students.addAll(program.getStudents());
+        }
+        return students;
+    }
     public Courses updateCourse(Long id, Courses updatedCourse) {
         Courses existingCourse = courseRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Course not found with id: " + id));
