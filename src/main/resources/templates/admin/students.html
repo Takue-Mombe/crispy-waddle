@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Students</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .table-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .table-container .table {
+      width: 100%;
+      max-width: 800px;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      padding: 0.5rem;
+      border: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #f2f2f2;
+      font-weight: bold;
+    }
+
+    .modal {
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .modal-header {
+      background-color: #343a40; /* Dark theme */
+      border-bottom: none;
+      color: white; /* White text */
+    }
+
+    .modal-title {
+      font-weight: bold;
+    }
+
+    .modal-footer {
+      border-top: none;
+    }
+
+    .modal-footer button {
+      margin-right: 0.5rem;
+    }
+
+    .add-student-btn {
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+<!-- Add Student Button -->
+<div class="container text-center">
+  <button type="button" class="btn btn-primary add-student-btn" data-toggle="modal" data-target="#addStudentModal">Add Student</button>
+</div>
+
+<!-- Table Container -->
+<div class="table-container">
+  <table class="table">
+    <thead>
+    <tr>
+      <th>Reg Number</th>
+      <th>Name</th>
+      <th>Year Enrolled</th>
+      <th>Email</th>
+      <th>Semester</th>
+      <th>Program</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="student : ${students}">
+      <td th:text="${student.regNumber}"></td>
+      <td th:text="${student.firstName} + ' ' + ${student.lastName}"></td>
+      <td th:text="${student.year_enrolled}"></td>
+      <td th:text="${student.personalEmail}"></td>
+      <td th:text="${student.semester}"></td>
+      <td th:text="${student.program.programName}"></td>
+      <td>
+        <button class="btn btn-primary" data-toggle="modal" data-target="#addStudentModal" th:data-student-id="${student.studentId}">Edit</button>
+        <button class="btn btn-danger">Delete</button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Add Student Modal -->
+<div class="modal fade" id="addStudentModal" tabindex="-1" role="dialog" aria-labelledby="addStudentModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content bg-dark text-white">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addStudentModalLabel">Add Student</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="/admin/save-student" method="post">
+          <div class="form-group">
+            <label for="regNumber">Reg Number</label>
+            <input type="text" class="form-control" id="regNumber" name="regNumber" placeholder="Enter Reg Number">
+          </div>
+          <div class="form-group">
+            <label for="firstName">First Name</label>
+            <input type="text" class="form-control" id="firstName" name="firstName" placeholder="Enter First Name">
+          </div>
+          <div class="form-group">
+            <label for="lastName">Last Name</label>
+            <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Enter Last Name">
+          </div>
+          <div class="form-group">
+            <label for="yearEnrolled">Year Enrolled</label>
+            <input type="text" class="form-control" id="yearEnrolled" name="yearEnrolled" placeholder="Enter Year Enrolled">
+          </div>
+          <div class="form-group">
+            <label for="personalEmail">Personal Email</label>
+            <input type="email" class="form-control" id="personalEmail" name="personalEmail" placeholder="Enter Personal Email">
+          </div>
+          <div class="form-group">
+            <label for="semester">Semester</label>
+            <input type="number" class="form-control" id="semester" name="semester" placeholder="Enter Semester">
+          </div>
+          <div class="form-group">
+            <label for="program">Program</label>
+            <select class="form-control" id="program" name="program">
+              <option th:each="program : ${programs}" th:value="${program.programId}" th:text="${program.programName}"></option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary">Add Student</button>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bootstrap JS and jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

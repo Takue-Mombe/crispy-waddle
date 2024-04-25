@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Landing Page</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #333;
+            padding: 1rem;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        nav ul li {
+            margin-right: 1rem;
+        }
+
+        nav ul li:last-child {
+            margin-right: 0;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .tiles {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 2rem;
+        }
+
+        .tile-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 2rem;
+        }
+
+        .tile {
+            background-color: #f2f2f2;
+            border: 1px solid #ddd;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: calc(20% - 2rem);
+            margin: 1rem;
+            padding: 1rem;
+            text-align: center;
+            transition: transform .3s;
+        }
+
+        .tile:hover {
+            transform: translateY(-5px);
+        }
+
+        @media (max-width: 768px) {
+            .tile {
+                width: calc(33.333% - 2rem);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .tile {
+                width: 100%;
+            }
+        }
+        @media (max-width: 768px) {
+            .tile {
+                width: calc(50% - 2rem);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .tile {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <nav>
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Programmes</a></li>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Contact Us</a></li>
+        </ul>
+    </nav>
+</header>
+<main>
+    <section class="tile-container">
+        <div class="tile" th:each="programme : ${programmes}">
+            <h2 th:text="${programme.name}"></h2>
+            <p th:text="${programme.numCourses} Courses"></p>
+        </div>
+        <div class="tile">
+            <h2>Students</h2>
+            <p>Number of Students</p>
+        </div>
+        <div class="tile">
+            <h2>School</h2>
+            <p>School Name</p>
+        </div>
+        <div class="tile">
+            <h2>Courses</h2>
+            <p>Number of Courses</p>
+        </div>
+        <div class="tile">
+            <h2>Lecturers</h2>
+            <p>Number of Lecturers</p>
+        </div>
+    </section>
+</main>
+</body>
+</html>
