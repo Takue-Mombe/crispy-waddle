@@ -1,10 +1,89 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>$Title$</title>
+    <title>Add Lecturer</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-$END$
+
+<div class="container mt-5">
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#addLecturer">Add Lecturer</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#lecturerList">Lecturer List</a>
+        </li>
+    </ul>
+
+    <div class="tab-content mt-3">
+        <!-- Add Lecturer Tab -->
+        <div id="addLecturer" class="tab-pane fade show active">
+            <h3>Add Lecturer</h3>
+            <!-- Form to add lecturer -->
+            <form action="/admin/add" method="post">
+                <div class="form-group">
+                    <label for="lecturerNumber">Lecturer Number</label>
+                    <input type="text" class="form-control" id="lecturerNumber" name="lecturerNumber" required>
+                </div>
+                <div class="form-group">
+                    <label for="firstName">First Name</label>
+                    <input type="text" class="form-control" id="firstName" name="firstName" required>
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Last Name</label>
+                    <input type="text" class="form-control" id="lastName" name="lastName" required>
+                </div>
+                <div class="form-group">
+                    <label for="personalEmail">Personal Email</label>
+                    <input type="email" class="form-control" id="personalEmail" name="personalEmail" required>
+                </div>
+                <!-- Dropdown to select courses for the lecturer -->
+                <div class="form-group">
+                    <label for="courses">Select Courses</label>
+                    <select multiple class="form-control" id="courses" name="selectedCourses">
+                        <!-- Loop through courses and display each course as an option -->
+                        <option th:each="course : ${courses}" th:value="${course.courseId}" th:text="${course.courseName}"></option>
+                    </select>
+
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+
+        <!-- Lecturer List Tab -->
+        <div id="lecturerList" class="tab-pane fade">
+            <h3>Lecturer List</h3>
+            <!-- Table to display lecturer list -->
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Lecturer Number</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Personal Email</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- Loop through lecturer list and display each lecturer -->
+                <tr th:each="lecturer : ${lecturers}">
+                    <td th:text="${lecturer.lecturerNumber}"></td>
+                    <td th:text="${lecturer.firstName}"></td>
+                    <td th:text="${lecturer.lastName}"></td>
+                    <td th:text="${lecturer.personalEmail}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS and jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 </body>
 </html>

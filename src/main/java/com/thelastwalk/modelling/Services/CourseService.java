@@ -50,4 +50,8 @@ public class CourseService {
     public void deleteCourse(Long id) {
         courseRepository.deleteById(id);
     }
+
+    public List<Courses> getCoursesById(List<Long> courseIds) {
+        return courseRepository.findAllById(courseIds);
+    }
 }

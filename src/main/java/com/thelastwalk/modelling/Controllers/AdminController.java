@@ -4,10 +4,7 @@ import com.thelastwalk.modelling.Models.*;
 import com.thelastwalk.modelling.Services.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -52,6 +49,30 @@ public class AdminController {
         model.addAttribute("students",students);
             return "/admin/students";
     }
+    @GetMapping("/lecturerList")
+    public String viewLecturer(Model model){
+        List<Courses>courses=courseService.getAllCourses();
+        List<Lecturer>lecturers=lecturerService.getAllLecturers();
+        model.addAttribute("courses",courses);
+        model.addAttribute("lecturers",lecturers);
+        return "/admin/lecturers";
+    }
+    @PostMapping("/add")
+    public String addLecturer(Lecturer lecturer, @RequestParam("selectedCourses") List<Long> selectedCourses) {
+        lecturer.setCourses(courseService.getCoursesById(selectedCourses)); // Assuming you have a method to get courses by their IDs
+        lecturerService.createLecturer(lecturer); // Assuming you have a service method to save a lecturer
+
+        // Update courses with the assigned lecturer information
+        List<Courses> courses = courseService.getCoursesById(selectedCourses);
+        for (Courses course : courses) {
+            course.setLecturer(lecturer); // Set the lecturer of the course to the newly added lecturer
+            courseService.updateCourse(course.getCourseId(), course); // Update the course with the assigned lecturer information
+        }
+
+        return "redirect:/admin/lecturerList"; // Redirect to the add lecturer page after successfully adding the lecturer
+    }
+
+
 
     @PostMapping("/save-student")
     public String saveStudent(@ModelAttribute Student student) {

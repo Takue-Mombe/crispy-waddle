@@ -19,7 +19,6 @@ public class Courses {
     private String courseCode;
     @Column
     private String courseName;
-
     @ManyToOne
     @JoinColumn(name = "program_id")
     private Programs program;
